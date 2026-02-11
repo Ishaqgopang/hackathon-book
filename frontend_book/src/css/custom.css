@@ -1,0 +1,309 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* Modern robotics-themed color scheme */
+:root {
+  /* Primary colors - robotics/blue theme */
+  --ifm-color-primary: #0ea5e9; /* Light blue */
+  --ifm-color-primary-dark: #0284c7; /* Darker blue */
+  --ifm-color-primary-darker: #0369a1; /* Even darker blue */
+  --ifm-color-primary-darkest: #075985; /* Darkest blue */
+  --ifm-color-primary-light: #38bdf8; /* Lighter blue */
+  --ifm-color-primary-lighter: #7dd3fc; /* Lightest blue */
+  --ifm-color-primary-lightest: #bae6fd; /* Pale blue */
+  
+  /* Secondary colors - accent colors */
+  --ifm-color-secondary: #8b5cf6; /* Purple */
+  --ifm-color-accent: #ec4899; /* Pink */
+  --ifm-color-success: #10b981; /* Green */
+  --ifm-color-warning: #f59e0b; /* Amber */
+  --ifm-color-danger: #ef4444; /* Red */
+  
+  /* Backgrounds */
+  --ifm-background-color: #f8fafc; /* Light gray-blue background */
+  --ifm-background-surface-color: #ffffff; /* Card backgrounds */
+  --ifm-hover-overlay: rgba(14, 165, 233, 0.1); /* Hover effect */
+  
+  /* Typography */
+  --ifm-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: 1.6;
+  
+  /* Code blocks */
+  --ifm-code-font-size: 90%;
+  --ifm-code-border-radius: 0.5rem;
+  --docusaurus-highlighted-code-line-bg: rgba(156, 163, 175, 0.15);
+  
+  /* Spacing */
+  --ifm-spacing-horizontal: 1.5rem;
+  --ifm-spacing-vertical: 1.5rem;
+  
+  /* Border radius */
+  --ifm-global-radius: 0.75rem;
+  --ifm-card-border-radius: var(--ifm-global-radius);
+  
+  /* Shadows */
+  --ifm-global-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --ifm-card-shadow: var(--ifm-global-shadow);
+  --ifm-hero-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  /* Transitions */
+  --ifm-transition-fast: 0.2s ease;
+  --ifm-transition-default: 0.3s ease;
+  --ifm-transition-slow: 0.5s ease;
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] {
+  --ifm-color-primary: #38bdf8; /* Light blue */
+  --ifm-color-primary-dark: #0ea5e9; /* Blue */
+  --ifm-color-primary-darker: #0284c7; /* Darker blue */
+  --ifm-color-primary-darkest: #0369a1; /* Darkest blue */
+  --ifm-color-primary-light: #7dd3fc; /* Lighter blue */
+  --ifm-color-primary-lighter: #bae6fd; /* Lightest blue */
+  --ifm-color-primary-lightest: #e0f2fe; /* Pale blue */
+  
+  /* Dark mode backgrounds */
+  --ifm-background-color: #0f172a; /* Dark blue-gray */
+  --ifm-background-surface-color: #1e293b; /* Darker surface */
+  --ifm-hover-overlay: rgba(56, 189, 248, 0.1);
+  
+  /* Dark mode shadows */
+  --docusaurus-highlighted-code-line-bg: rgba(148, 163, 184, 0.2);
+  --ifm-global-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced typography */
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 1rem;
+}
+
+.markdown h1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+.markdown h2 {
+  font-size: 2rem;
+  line-height: 1.3;
+}
+
+.markdown h3 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+/* Enhanced buttons */
+.button {
+  border-radius: var(--ifm-global-radius);
+  font-weight: 600;
+  transition: all var(--ifm-transition-fast);
+  text-decoration: none !important;
+  box-shadow: var(--ifm-global-shadow);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.button--primary {
+  background-color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+}
+
+.button--primary:hover {
+  background-color: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+}
+
+/* Enhanced cards */
+.card {
+  border-radius: var(--ifm-card-border-radius);
+  box-shadow: var(--ifm-card-shadow);
+  transition: all var(--ifm-transition-default);
+  overflow: hidden;
+  border: none;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Enhanced code blocks */
+.codeBlockContainer_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Container-styles-module {
+  border-radius: var(--ifm-code-border-radius);
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+/* Enhanced navigation */
+.navbar {
+  box-shadow: var(--ifm-global-shadow);
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme='dark'] .navbar {
+  background-color: rgba(15, 23, 42, 0.9);
+}
+
+/* Enhanced sidebar */
+.menu__list-item-collapsible,
+.menu__list-item {
+  border-radius: calc(var(--ifm-global-radius) - 2px);
+  margin-bottom: 2px;
+}
+
+.menu__list-item:not(:first-child) {
+  margin-top: 0;
+}
+
+.menu__link {
+  border-radius: calc(var(--ifm-global-radius) - 4px);
+  transition: all var(--ifm-transition-fast);
+}
+
+.menu__link:hover {
+  background-color: var(--ifm-hover-overlay);
+}
+
+/* Enhanced footer */
+.footer {
+  background: linear-gradient(135deg, var(--ifm-color-primary-darkest) 0%, var(--ifm-color-secondary) 100%);
+  color: white;
+}
+
+.footer__title {
+  color: white;
+  font-weight: 600;
+}
+
+.footer__link-item {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer__link-item:hover {
+  color: white;
+}
+
+/* Animation utilities */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Robotics-themed elements */
+.robotics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.robotics-card {
+  background: var(--ifm-background-surface-color);
+  border-radius: var(--ifm-card-border-radius);
+  padding: 2rem;
+  box-shadow: var(--ifm-card-shadow);
+  transition: all var(--ifm-transition-default);
+  border: 1px solid rgba(14, 165, 233, 0.1);
+}
+
+.robotics-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+.robotics-icon {
+  width: 3rem;
+  height: 3rem;
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-secondary) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.robotics-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: white;
+}
+
+/* Module-specific styling */
+.module-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.module-1 { background-color: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
+.module-2 { background-color: rgba(168, 85, 247, 0.1); color: #a855f7; }
+.module-3 { background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.module-4 { background-color: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+/* Progress indicators */
+.progress-bar {
+  height: 0.5rem;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ifm-color-primary), var(--ifm-color-secondary));
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* Interactive elements */
+.interactive-element {
+  cursor: pointer;
+  transition: all var(--ifm-transition-fast);
+}
+
+.interactive-element:hover {
+  transform: scale(1.02);
+}

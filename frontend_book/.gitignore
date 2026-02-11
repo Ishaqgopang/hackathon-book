@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Production builds
+/build/
+/dist/
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+.temp/
+tmp/
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Docusaurus cache and generated files
+.docusaurus/
+.generated/
+.i18n/
+
+# Temporary upload folders
+/uploads/

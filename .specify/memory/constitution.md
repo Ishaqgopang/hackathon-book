@@ -1,55 +1,41 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+- Version change: 1.0.0 → 1.1.0
+- Modified principles: [PRINCIPLE_1_NAME] → Specification-first development, [PRINCIPLE_2_NAME] → Accuracy via official documentation, [PRINCIPLE_3_NAME] → Clarity for technical readers, [PRINCIPLE_4_NAME] → Reproducibility and deployability, [PRINCIPLE_5_NAME] → Agentic, modular design
+- Added sections: Development Workflow section
+- Removed sections: None
+- Templates requiring updates: ✅ updated all templates
+- Follow-up TODOs: None
+-->
+# AI/Spec-Driven Book with Embedded RAG Chatbot Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Specification-first development
+All features and functionality begin with detailed specifications that guide implementation. Code is written to match specifications, not the reverse. Specifications must include acceptance criteria, edge cases, and validation requirements before any implementation begins.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Accuracy via official documentation
+All technical claims, API references, and code examples must be verified against official documentation from authoritative sources. Primary sources are preferred over secondary interpretations. All third-party dependencies must be properly cited with version-specific references.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Clarity for technical readers
+Documentation and code must prioritize clarity and accessibility for technical audiences. Complex concepts should be broken down into digestible sections with practical examples. Explanations must be precise, with sufficient detail for readers to reproduce implementations.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Reproducibility and deployability
+All code examples, configurations, and deployment procedures must be tested and verified to work as documented. Development environments must be reproducible across different platforms. Deployment processes must be automated and idempotent.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### Agentic, modular design
+System architecture follows modular design principles with well-defined interfaces between components. Each module should be independently testable and replaceable. Agent-based systems should maintain clear separation of concerns and predictable interaction patterns.
 
-### [PRINCIPLE_6_NAME]
+### Production-ready, minimal code
+All implementations must be production-quality from the outset. Code should follow the principle of "minimal viable implementation" - sufficient functionality to meet requirements without unnecessary complexity. Performance and security considerations are addressed during initial development.
 
+## Technical Standards
+Technology stack requirements include Docusaurus for documentation, FastAPI for backend services, Qdrant Cloud for vector storage, and Neon Serverless Postgres for metadata. All infrastructure must support environment-variable-based secrets and be deployable to GitHub Pages with supporting cloud services.
 
-[PRINCIPLE__DESCRIPTION]
-
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow
+All code changes must be accompanied by updated specifications. Pull requests require specification compliance verification. All claims in documentation must be verifiable against official sources. Code reviews check for adherence to architectural principles and proper modular design.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+This constitution supersedes all other development practices. All project activities must comply with these principles. Amendments require formal documentation and approval process. All PRs and reviews must verify constitutional compliance.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.1.0 | **Ratified**: 2026-02-07 | **Last Amended**: 2026-02-07
