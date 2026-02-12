@@ -4,7 +4,6 @@ emoji: 🤗
 colorFrom: indigo
 colorTo: red
 sdk: docker
-runtime: huggingface_hub
 pinned: false
 license: mit
 ---

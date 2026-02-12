@@ -1,37 +1,44 @@
-from fastapi import FastAPI
+import os
+import sys
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-import os
-from dotenv import load_dotenv
+import asyncio
 
-# Load environment variables
-load_dotenv()
+# Add the parent directory to the path to import modules
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# Initialize FastAPI app
-app = FastAPI(title="Hackathon Book Backend", version="1.0.0")
+# Initialize FastAPI app with lifespan to handle startup/shutdown
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    await connect_to_mongo()
+    yield
+    # Shutdown
+    await close_mongo_connection()
+
+app = FastAPI(
+    title="Hackathon Book Backend", 
+    version="1.0.0",
+    lifespan=lifespan
+)
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Import routers
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Import routers after app initialization to avoid circular imports
 from routers.books import router as books_router
 app.include_router(books_router)
-
-# Import and initialize MongoDB
-import asyncio
-from motor.motor_asyncio import AsyncIOMotorClient
 
 # MongoDB connection parameters
 MONGODB_URL = os.getenv("MONGODB_URI", "mongodb://localhost:27017/hackathon-book")
@@ -44,11 +51,11 @@ async def connect_to_mongo():
     """Connect to MongoDB"""
     global mongodb_client, database
     try:
+        from motor.motor_asyncio import AsyncIOMotorClient
         mongodb_client = AsyncIOMotorClient(
             MONGODB_URL,
-            serverSelectionTimeoutMS=1000,  # 1 second timeout
-            connectTimeoutMS=1000,
-            retryWrites=False  # Disable retry writes for faster failure
+            serverSelectionTimeoutMS=2000,  # 2 second timeout
+            connectTimeoutMS=2000,
         )
         # Extract database name from the connection string
         db_name = MONGODB_URL.split("/")[-1] if "/" in MONGODB_URL else "hackathon-book"
@@ -58,7 +65,7 @@ async def connect_to_mongo():
         print("Connected to MongoDB successfully")
     except Exception as e:
         print(f"Could not connect to MongoDB: {e}")
-        print("Make sure MongoDB is running")
+        print("Running in offline mode - data will not persist")
         # Set database to None so the app knows it's not connected
         database = None
 
@@ -69,20 +76,12 @@ async def close_mongo_connection():
         mongodb_client.close()
         print("Disconnected from MongoDB")
 
-@app.on_event("startup")
-async def startup():
-    await connect_to_mongo()
-
-@app.on_event("shutdown")
-async def shutdown():
-    await close_mongo_connection()
-
 @app.get("/")
 async def read_root():
     return {"message": "Hackathon Book Backend API is running!"}
 
 # Pydantic models
-from pydantic import BaseModel
+from pydantic import BaseModel as PydanticBaseModel
 from typing import List, Optional
 
 class PyObjectId(ObjectId):
@@ -104,7 +103,7 @@ class PyObjectId(ObjectId):
             raise ValueError('Invalid ObjectId')
         return ObjectId(str(v))
 
-class Book(BaseModel):
+class Book(PydanticBaseModel):
     title: str
     author: str
     description: Optional[str] = None
@@ -118,6 +117,8 @@ class Book(BaseModel):
     createdAt: Optional[datetime] = None
     updatedAt: Optional[datetime] = None
 
+# For Hugging Face Spaces, we need to make sure the app runs on port 7860
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 7860)))
+    port = int(os.environ.get("PORT", 7860))  # Hugging Face Spaces uses port 7860
+    uvicorn.run(app, host="0.0.0.0", port=port)

@@ -1,20 +1,22 @@
-# Use the official Python runtime as the base image
-FROM python:3.11-slim
+FROM python:3.10-slim
 
-# Set the working directory inside the container
-WORKDIR /app
+WORKDIR /code
 
-# Copy the requirements file to the working directory
-COPY backend_py/requirements.txt .
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
+COPY backend_py/requirements.txt /code/requirements.txt
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code to the working directory
-COPY backend_py/ .
+COPY backend_py/ /code/
 
-# Expose the port that the application will run on
-EXPOSE 5000
+# Make sure the app runs on port 7860 which is expected by Hugging Face Spaces
+ENV PORT=7860
 
-# Define the command to run the application
-CMD ["python", "-m", "src.main"]
+# Expose the port
+EXPOSE 7860
+
+CMD ["python", "app.py"]

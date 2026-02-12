@@ -33,13 +33,18 @@ def book_helper(book) -> dict:
         "updatedAt": book.get("updatedAt")
     }
 
+# In-memory storage for when MongoDB is not available
+books_memory_storage = []
+
 # GET /api/books - Get all books
 @router.get("/", response_model=List[Book])
 async def get_books(skip: int = 0, limit: int = 100):
+    global books_memory_storage
     from ..database import database  # Get the global database instance
     if database is None:
-        # Return empty list if database is not connected
-        return []
+        # Return in-memory storage if database is not connected
+        return [Book(**book) for book in books_memory_storage[skip:skip+limit]]
+    
     books = []
     async for book in database["books"].find().skip(skip).limit(limit):
         books.append(book_helper(book))
@@ -48,28 +53,32 @@ async def get_books(skip: int = 0, limit: int = 100):
 # GET /api/books/{id} - Get a specific book
 @router.get("/{id}", response_model=Book)
 async def get_book(id: str):
+    global books_memory_storage
     from ..database import database  # Get the global database instance
     if not ObjectId.is_valid(id):
         raise HTTPException(status_code=400, detail="Invalid book ID")
-    
+
     if database is None:
-        raise HTTPException(status_code=500, detail="Database not connected")
-    
+        # Look in in-memory storage if database is not connected
+        for book in books_memory_storage:
+            if str(book.get("id")) == id:
+                return Book(**book)
+        raise HTTPException(status_code=404, detail="Book not found")
+
     book = await database["books"].find_one({"_id": ObjectId(id)})
     if book is None:
         raise HTTPException(status_code=404, detail="Book not found")
-    
+
     return Book(**book_helper(book))
 
 # POST /api/books - Create a new book
 @router.post("/", response_model=Book)
 async def create_book(book: BookCreate):
+    global books_memory_storage
     from ..database import database  # Get the global database instance
-    if database is None:
-        raise HTTPException(status_code=500, detail="Database not connected")
-
+    
     book_dict = book.dict()
-    book_dict["_id"] = ObjectId()
+    book_dict["id"] = str(ObjectId())  # Generate a new ID
     book_dict["createdAt"] = datetime.utcnow()
     book_dict["updatedAt"] = datetime.utcnow()
 
@@ -91,6 +100,12 @@ async def create_book(book: BookCreate):
         except Exception as e:
             print(f"Error processing with AI: {str(e)}")
 
+    if database is None:
+        # Store in memory if database is not connected
+        books_memory_storage.append(book_dict)
+        return Book(**book_dict)
+
+    # Store in MongoDB if available
     result = await database["books"].insert_one(book_dict)
     created_book = await database["books"].find_one({"_id": result.inserted_id})
 
@@ -99,12 +114,10 @@ async def create_book(book: BookCreate):
 # PUT /api/books/{id} - Update a book
 @router.put("/{id}", response_model=Book)
 async def update_book(id: str, book: BookUpdate):
+    global books_memory_storage
     from ..database import database  # Get the global database instance
     if not ObjectId.is_valid(id):
         raise HTTPException(status_code=400, detail="Invalid book ID")
-
-    if database is None:
-        raise HTTPException(status_code=500, detail="Database not connected")
 
     book_dict = {k: v for k, v in book.dict().items() if v is not None}
     book_dict["updatedAt"] = datetime.utcnow()
@@ -127,6 +140,14 @@ async def update_book(id: str, book: BookUpdate):
         except Exception as e:
             print(f"Error processing with AI: {str(e)}")
 
+    if database is None:
+        # Update in-memory storage if database is not connected
+        for i, book in enumerate(books_memory_storage):
+            if str(book.get("id")) == id:
+                books_memory_storage[i].update(book_dict)
+                return Book(**books_memory_storage[i])
+        raise HTTPException(status_code=404, detail="Book not found")
+
     result = await database["books"].update_one(
         {"_id": ObjectId(id)}, {"$set": book_dict}
     )
@@ -140,16 +161,22 @@ async def update_book(id: str, book: BookUpdate):
 # DELETE /api/books/{id} - Delete a book
 @router.delete("/{id}")
 async def delete_book(id: str):
+    global books_memory_storage
     from ..database import database  # Get the global database instance
     if not ObjectId.is_valid(id):
         raise HTTPException(status_code=400, detail="Invalid book ID")
-    
+
     if database is None:
-        raise HTTPException(status_code=500, detail="Database not connected")
-    
+        # Delete from in-memory storage if database is not connected
+        for i, book in enumerate(books_memory_storage):
+            if str(book.get("id")) == id:
+                del books_memory_storage[i]
+                return {"msg": "Book deleted successfully"}
+        raise HTTPException(status_code=404, detail="Book not found")
+
     result = await database["books"].delete_one({"_id": ObjectId(id)})
-    
+
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Book not found")
-    
+
     return {"msg": "Book deleted successfully"}
