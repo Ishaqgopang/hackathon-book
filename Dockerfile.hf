@@ -1,0 +1,28 @@
+FROM nginx:alpine
+
+# Install Node.js and npm
+RUN apk add --no-cache nodejs npm
+
+WORKDIR /app
+
+# Copy package files
+COPY frontend_book/package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application
+COPY frontend_book/ .
+
+# Build the Docusaurus site
+RUN npm run build
+
+# Copy the built site to nginx directory
+RUN rm -rf /usr/share/nginx/html/*
+RUN cp -r build/* /usr/share/nginx/html/
+
+# Expose port
+EXPOSE 7860
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

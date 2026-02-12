@@ -1,0 +1,14 @@
+---
+title: Hackathon Book Frontend
+emoji: 🤗
+colorFrom: indigo
+colorTo: red
+sdk: docker
+runtime: huggingface_hub
+pinned: false
+license: mit
+---
+
+# Hackathon Book Frontend
+
+This Space hosts the Docusaurus-based frontend for the Hackathon Book project, which serves as documentation for the Physical AI & Humanoid Robotics course.
