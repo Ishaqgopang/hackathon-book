@@ -19,4 +19,4 @@ ENV PORT=7860
 # Expose the port
 EXPOSE 7860
 
-CMD ["python", "app.py"]
+CMD ["python", "app_simple.py"]
