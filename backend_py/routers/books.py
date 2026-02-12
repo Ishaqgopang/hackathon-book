@@ -67,15 +67,33 @@ async def create_book(book: BookCreate):
     from ..database import database  # Get the global database instance
     if database is None:
         raise HTTPException(status_code=500, detail="Database not connected")
-    
+
     book_dict = book.dict()
     book_dict["_id"] = ObjectId()
     book_dict["createdAt"] = datetime.utcnow()
     book_dict["updatedAt"] = datetime.utcnow()
-    
+
+    # Process with AI if description is provided
+    if book_dict.get("description"):
+        try:
+            # Import and use AI service
+            from ..services.ai_service import ai_service
+            # Generate AI summary
+            ai_summary = await ai_service.summarize_text(book_dict["description"])
+            book_dict["aiSummary"] = ai_summary
+
+            # Analyze sentiment
+            ai_sentiment = await ai_service.classify_sentiment(book_dict["description"])
+            book_dict["aiSentiment"] = ai_sentiment
+        except ImportError:
+            # AI service not available
+            print("AI service not available")
+        except Exception as e:
+            print(f"Error processing with AI: {str(e)}")
+
     result = await database["books"].insert_one(book_dict)
     created_book = await database["books"].find_one({"_id": result.inserted_id})
-    
+
     return Book(**book_helper(created_book))
 
 # PUT /api/books/{id} - Update a book
@@ -84,20 +102,38 @@ async def update_book(id: str, book: BookUpdate):
     from ..database import database  # Get the global database instance
     if not ObjectId.is_valid(id):
         raise HTTPException(status_code=400, detail="Invalid book ID")
-    
+
     if database is None:
         raise HTTPException(status_code=500, detail="Database not connected")
-    
+
     book_dict = {k: v for k, v in book.dict().items() if v is not None}
     book_dict["updatedAt"] = datetime.utcnow()
-    
+
+    # Process with AI if description is provided
+    if book_dict.get("description"):
+        try:
+            # Import and use AI service
+            from ..services.ai_service import ai_service
+            # Generate AI summary
+            ai_summary = await ai_service.summarize_text(book_dict["description"])
+            book_dict["aiSummary"] = ai_summary
+
+            # Analyze sentiment
+            ai_sentiment = await ai_service.classify_sentiment(book_dict["description"])
+            book_dict["aiSentiment"] = ai_sentiment
+        except ImportError:
+            # AI service not available
+            print("AI service not available")
+        except Exception as e:
+            print(f"Error processing with AI: {str(e)}")
+
     result = await database["books"].update_one(
         {"_id": ObjectId(id)}, {"$set": book_dict}
     )
-    
+
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Book not found")
-    
+
     updated_book = await database["books"].find_one({"_id": ObjectId(id)})
     return Book(**book_helper(updated_book))
 
