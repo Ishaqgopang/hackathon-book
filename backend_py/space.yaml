@@ -1,0 +1,14 @@
+---
+title: Hackathon Book Backend
+emoji: 🤗
+colorFrom: indigo
+colorTo: red
+sdk: docker
+runtime: huggingface_hub
+pinned: false
+license: mit
+---
+
+# Hackathon Book Backend
+
+This Space hosts the backend API for the Hackathon Book project, which provides book management with AI features using Hugging Face models.

@@ -1,58 +1,39 @@
-# Hackathon Book Backend (Python/FastAPI)
+# Hackathon Book Backend on Hugging Face
 
-This is the Python backend for the hackathon book project, built with FastAPI and MongoDB.
+This is the backend for the Hackathon Book project, deployed on Hugging Face Spaces. It provides a RESTful API for managing books with AI-powered features using Hugging Face models.
 
-## Setup
+## Features
 
-1. Install Python 3.8 or higher
+- Book management (CRUD operations)
+- AI-powered text summarization of book descriptions
+- Sentiment analysis of book content
+- Integration with Hugging Face models for NLP tasks
 
-2. Create a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Create a `.env` file in the root of the backend_py directory with the following:
-```env
-MONGODB_URI=mongodb://localhost:27017/hackathon-book
-PORT=5000
-HUGGING_FACE_TOKEN=your_huggingface_token_here
-```
-
-5. Start the development server:
-```bash
-python -m src.main
-```
-
-Or using uvicorn directly:
-```bash
-uvicorn main:app --reload --port 5000
-```
-
-## Available Scripts
-
-- `python -m src.main` - Start the production server
-- `uvicorn main:app --reload` - Start the development server with hot reload
-
-## API Routes
+## API Endpoints
 
 - `GET /` - Health check
 - `GET /api/books` - Get all books
 - `GET /api/books/{id}` - Get a specific book
-- `POST /api/books` - Create a new book (supports AI processing with `enable_ai_processing` query param)
+- `POST /api/books` - Create a new book (with AI processing)
 - `PUT /api/books/{id}` - Update a book
 - `DELETE /api/books/{id}` - Delete a book
 
-## AI Features
+## Hugging Face Integration
 
-The backend includes AI-powered features using Hugging Face integration:
-- Text summarization of book descriptions
-- Sentiment analysis of book content
-- Enhanced book management with AI insights
+The backend uses Hugging Face models for:
+- Text summarization (using facebook/bart-large-cnn)
+- Sentiment analysis (using cardiffnlp/twitter-roberta-base-sentiment-latest)
+- Text generation (using gpt2)
 
-To enable AI processing when creating a book, include `enable_ai_processing=true` as a query parameter.
+## Environment Variables
+
+To run this application, you'll need to set the following environment variables:
+
+- `HUGGING_FACE_TOKEN`: Your Hugging Face API token
+- `MONGODB_URI`: MongoDB connection string (optional, for persistent storage)
+
+## Usage
+
+The API is accessible at the root URL of this Space. You can make HTTP requests to interact with the book management system.
+
+When creating or updating books with descriptions, the system will automatically process the text using Hugging Face models to generate summaries and analyze sentiment.
